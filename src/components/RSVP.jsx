@@ -97,11 +97,28 @@ export default function RSVP() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const madLibs = `I want to ${form.mad_libs_verb} ${form.mad_libs_person}.`;
+    
     await supabase.from('rsvps').insert({
       invitee_name: name,
       ...form,
       mad_libs: madLibs
     });
+
+    // SEND SMS ALERT (TWILIO)
+    const message = `${name} just RSVP'd: "${form.attendance}"! Party getting real.`;
+    await fetch('https://api.twilio.com/2010-04-01/Accounts/YOUR_ACCOUNT_SID/Messages.json', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + btoa('YOUR_ACCOUNT_SID:YOUR_AUTH_TOKEN'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        To: '+18089303345',           // ← YOUR PHONE
+        From: '+1YOUR_TWILIO_NUMBER', // ← TWILIO NUMBER
+        Body: message
+      })
+    });
+
     alert('RSVP sent! Mahalo!');
     navigate('/main');
   };
