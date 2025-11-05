@@ -7,9 +7,6 @@ export default function Parking() {
         alt="Parking Map"
         className="w-full max-w-md rounded-xl shadow-2xl"
       />
-      <p className="mt-4 text-center opacity-80">
-        Upload your image to <code className="bg-white/20 px-2 rounded">public/parking.jpg</code>
-      </p>
     </div>
   );
 }

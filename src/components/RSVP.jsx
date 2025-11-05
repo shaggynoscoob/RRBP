@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient.js';
 
 const attendanceOptions = [
-  'Definitely gonna come',
   'Coming',
   'I can’t cum',
-  'Not sure'
+  'Not sure',
+  'definitely gonna cum'
 ];
 
 const nonAlcDrinks = [
@@ -87,7 +87,7 @@ export default function RSVP() {
   const verbs = [
     'fuck', 'suck', 'lick', 'bite', 'slap', 'punch', 'kick', 'choke', 'spank', 'whip',
     'cuddle', 'hug', 'kiss', 'high-five', 'bro-hug', 'dance with', 'sing to', 'cook for',
-    'massage', 'worship', 'marry', 'kill', 'sleep with', 'eat the ass of', 'motorboat',
+    'massage', 'worship', 'marry', 'kill', 'sleep with', 'eat ass of', 'motorboat',
     'teabag', 'rim', 'peg', 'dominate', 'submit to', 'tickle', 'prank', 'roast',
     'carry', 'piggyback', 'wrestle', 'race', 'bet against', 'cheer for', 'boo',
     'photograph', 'film', 'livestream', 'tag in meme', 'dedicate song to',
@@ -118,7 +118,7 @@ export default function RSVP() {
           <select
             value={form.attendance}
             onChange={e => setForm({...form, attendance: e.target.value})}
-            className="w-full p-3 rounded-lg bg-white/20 text-white"
+            className="w-full p-3 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-pink-500"
             required
           >
             <option value="">Select...</option>
@@ -129,13 +129,13 @@ export default function RSVP() {
         {/* Drinks */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-lg font-bold mb-2">Non-Alc</label>
+            <label className="block text-lg font-bold mb-2">N/A Drinks</label>
             <input
               list="non-alc"
               value={form.drink_non_alc}
               onChange={e => setForm({...form, drink_non_alc: e.target.value})}
               placeholder="Type or select"
-              className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50"
+              className="w-full p-3 rounded-lg bg-white text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-500"
             />
             <datalist id="non-alc">
               {nonAlcDrinks.map(d => <option key={d}>{d}</option>)}
@@ -149,7 +149,7 @@ export default function RSVP() {
               value={form.drink_alc}
               onChange={e => setForm({...form, drink_alc: e.target.value})}
               placeholder="Type or select"
-              className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50"
+              className="w-full p-3 rounded-lg bg-white text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-500"
             />
             <datalist id="alc">
               {alcDrinks.map(d => <option key={d}>{d}</option>)}
@@ -165,7 +165,7 @@ export default function RSVP() {
             value={form.food}
             onChange={e => setForm({...form, food: e.target.value})}
             placeholder="Type or select"
-            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50"
+            className="w-full p-3 rounded-lg bg-white text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
           <datalist id="foods">
             {foods.map(f => <option key={f}>{f}</option>)}
@@ -179,7 +179,7 @@ export default function RSVP() {
             value={form.bringing}
             onChange={e => setForm({...form, bringing: e.target.value})}
             placeholder="Food, drink, grill, firewood..."
-            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50"
+            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
           {bringList.length > 0 && (
             <p className="text-sm opacity-80 mt-2">
@@ -195,7 +195,7 @@ export default function RSVP() {
             <select
               value={form.mad_libs_verb}
               onChange={e => setForm({...form, mad_libs_verb: e.target.value})}
-              className="flex-1 p-3 rounded-lg bg-white/20 text-white"
+              className="flex-1 p-3 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-pink-500"
             >
               <option value="">Verb...</option>
               {verbs.map(v => <option key={v}>{v}</option>)}
@@ -203,7 +203,7 @@ export default function RSVP() {
             <select
               value={form.mad_libs_person}
               onChange={e => setForm({...form, mad_libs_person: e.target.value})}
-              className="flex-1 p-3 rounded-lg bg-white/20 text-white"
+              className="flex-1 p-3 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-pink-500"
             >
               <option value="">Person...</option>
               {invitees.map(n => <option key={n}>{n}</option>)}

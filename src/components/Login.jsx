@@ -37,9 +37,11 @@ export default function Login() {
         return;
       }
       navigate('/riley');
-    } else {
-      localStorage.setItem('welcome', data.welcome_message);
-      navigate('/main');
+        } else {
+          const userData = { name: cleanName, welcome: data.welcome_message };
+          localStorage.setItem('welcome', data.welcome_message);
+          localStorage.setItem('current_user', JSON.stringify(userData));
+          navigate('/main');
     }
   };
 
