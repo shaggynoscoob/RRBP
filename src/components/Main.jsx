@@ -20,12 +20,12 @@ export default function Main() {
             <div className="bg-white/10 backdrop-blur rounded-2xl p-6 space-y-4">
                 <h2 className="text-3xl font-bold">When</h2>
                 <p className="text-xl">Saturday, November 22nd @ 3PM</p>
-                <p className="text-sm opacity-80">Tsunami? → Nov 29th</p>
+                <p className="text-sm opacity-80">Tsunami contingency date → Nov 29th</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur rounded-2xl p-6 space-y-4">
                 <h2 className="text-3xl font-bold">Where</h2>
-                <p className="text-xl">Haleiwa Army Beach</p>
+                <p className="text-xl">Fresh Air's, Haleiwa</p>
                 <div className="flex gap-4 justify-center">
                     <a
                         href="https://maps.apple.com/place?coordinate=21.589037,-158.112432&name=Marked%20Location&map=h"

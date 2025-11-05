@@ -104,20 +104,20 @@ export default function RSVP() {
       mad_libs: madLibs
     });
 
-    // SEND SMS ALERT (TWILIO)
-    const message = `${name} just RSVP'd: "${form.attendance}"! Party getting real.`;
-    await fetch('https://api.twilio.com/2010-04-01/Accounts/YOUR_ACCOUNT_SID/Messages.json', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Basic ' + btoa('YOUR_ACCOUNT_SID:YOUR_AUTH_TOKEN'),
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        To: '+18089303345',           // ← YOUR PHONE
-        From: '+1YOUR_TWILIO_NUMBER', // ← TWILIO NUMBER
-        Body: message
-      })
-    });
+    // // TWILIO SMS — COMMENTED OUT
+    // const message = `${name} just RSVP'd: "${form.attendance}"! Party getting real.`;
+    // await fetch('https://api.twilio.com/2010-04-01/Accounts/YOUR_ACCOUNT_SID/Messages.json', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Authorization': 'Basic ' + btoa('YOUR_ACCOUNT_SID:YOUR_AUTH_TOKEN'),
+    //     'Content-Type': 'application/x-www-form-urlencoded',
+    //   },
+    //   body: new URLSearchParams({
+    //     To: '+18089303345',
+    //     From: '+1YOUR_TWILIO_NUMBER',
+    //     Body: message
+    //   })
+    // });
 
     alert('RSVP sent! Mahalo!');
     navigate('/main');
