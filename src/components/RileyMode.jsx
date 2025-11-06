@@ -1,109 +1,158 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function RileyMode() {
   const [invitees, setInvitees] = useState([]);
+  const [rsvps, setRsvps] = useState([]);
+  const [activeTab, setActiveTab] = useState('invitees');
   const [newName, setNewName] = useState('');
-  const [editing, setEditing] = useState(null);
-  const [editMessage, setEditMessage] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState('');
+  const [editWelcome, setEditWelcome] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem('riley_auth')) {
+      navigate('/');
+      return;
+    }
     fetchInvitees();
-  }, []);
+    fetchRsvps();
+  }, [navigate]);
 
   const fetchInvitees = async () => {
     const { data } = await supabase.from('invitees').select('*').order('name');
     setInvitees(data);
   };
 
-  const addName = async () => {
+  const fetchRsvps = async () => {
+    const { data } = await supabase.from('rsvps').select('*').order('created_at', { ascending: false });
+    setRsvps(data);
+  };
+
+  const addInvitee = async () => {
     if (!newName.trim()) return;
-    await supabase.from('invitees').insert({ name: newName.trim() });
+    await supabase.from('invitees').insert({ name: newName.trim(), welcome_message: `${newName.trim()}'s here!` });
     setNewName('');
     fetchInvitees();
   };
 
-  const updateMessage = async (id) => {
-    await supabase.from('invitees').update({ welcome_message: editMessage }).eq('id', id);
-    setEditing(null);
+  const updateInvitee = async (id) => {
+    await supabase.from('invitees').update({ name: editName, welcome_message: editWelcome }).eq('id', id);
+    setEditingId(null);
     fetchInvitees();
   };
 
-  const deleteName = async (id) => {
+  const deleteInvitee = async (id) => {
     await supabase.from('invitees').delete().eq('id', id);
     fetchInvitees();
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-4xl font-bold text-center">RILEY MODE</h1>
-
-      {/* Add Name */}
-      <div className="flex gap-2">
-        <input
-          placeholder="New name"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          className="flex-1 px-4 py-2 rounded-lg bg-white/20 text-white placeholder-white/50"
-        />
+    <div className="min-h-screen p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl font-bold">RILEY MODE</h1>
         <button
-          onClick={addName}
-          className="px-6 py-2 bg-green-600 rounded-lg font-bold hover:scale-105 transition"
+          onClick={() => {
+            localStorage.removeItem('riley_auth');
+            navigate('/');
+          }}
+          className="px-4 py-2 bg-gray-600 rounded-lg"
         >
-          ADD
+          Logout
         </button>
       </div>
 
-      {/* List */}
-      <div className="space-y-3">
-        {invitees.map((inv) => (
-          <div key={inv.id} className="bg-white/10 backdrop-blur rounded-xl p-4 flex items-center justify-between">
-            <div className="flex-1">
-              <span className="font-bold">{inv.name}</span>
-              {editing === inv.id ? (
-                <input
-                  value={editMessage}
-                  onChange={(e) => setEditMessage(e.target.value)}
-                  className="ml-2 px-2 py-1 rounded bg-white/20 text-sm"
-                />
-              ) : (
-                <p className="text-sm opacity-80 ml-2">"{inv.welcome_message}"</p>
-              )}
-            </div>
-            <div className="flex gap-2">
-              {editing === inv.id ? (
-                <>
-                  <button onClick={() => updateMessage(inv.id)} className="text-green-400">Save</button>
-                  <button onClick={() => setEditing(null)} className="text-gray-400">Cancel</button>
-                </>
-              ) : (
-                <button onClick={() => { setEditing(inv.id); setEditMessage(inv.welcome_message); }} className="text-blue-400">Edit</button>
-              )}
-              <button onClick={() => deleteName(inv.id)} className="text-red-400">Delete</button>
-            </div>
-          </div>
-        ))}
+      <div className="flex gap-2 border-b border-white/20">
+        <button
+          onClick={() => setActiveTab('invitees')}
+          className={`px-6 py-3 font-bold ${activeTab === 'invitees' ? 'bg-white/20 rounded-t-lg' : 'opacity-70'}`}
+        >
+          Invitees ({invitees.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('rsvps')}
+          className={`px-6 py-3 font-bold ${activeTab === 'rsvps' ? 'bg-white/20 rounded-t-lg' : 'opacity-70'}`}
+        >
+          RSVPs ({rsvps.length})
+        </button>
       </div>
 
-      {/* Export RSVPs */}
-      <button
-        onClick={async () => {
-          const { data } = await supabase.from('rsvps').select('*');
-          const csv = [
-            ['Name', 'Attendance', 'Drink (NA)', 'Drink (Alc)', 'Food', 'Bringing', 'Mad Libs'],
-            ...data.map(r => [r.invitee_name, r.attendance, r.drink_non_alc, r.drink_alc, r.food, r.bringing, r.mad_libs])
-          ].map(row => row.join(',')).join('\n');
-          const blob = new Blob([csv], { type: 'text/csv' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'rsvps.csv';
-          a.click();
-        }}
-        className="w-full py-3 bg-yellow-600 rounded-lg font-bold hover:scale-105 transition"
-      >
-        DOWNLOAD RSVPs (CSV)
-      </button>
+      {activeTab === 'invitees' && (
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            <input
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && addInvitee()}
+              placeholder="Add new name..."
+              className="flex-1 p-3 rounded-lg bg-white text-black"
+            />
+            <button onClick={addInvitee} className="px-6 py-3 bg-green-600 rounded-lg font-bold">
+              ADD
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            {invitees.map((inv) => (
+              <div key={inv.id} className="bg-white/10 backdrop-blur p-4 rounded-lg flex items-center justify-between">
+                {editingId === inv.id ? (
+                  <div className="flex-1 flex gap-2">
+                    <input value={editName} onChange={(e) => setEditName(e.target.value)} className="flex-1 p-2 rounded bg-white text-black" />
+                    <input value={editWelcome} onChange={(e) => setEditWelcome(e.target.value)} placeholder="Welcome message" className="flex-1 p-2 rounded bg-white text-black" />
+                    <button onClick={() => updateInvitee(inv.id)} className="px-3 py-1 bg-green-600 rounded">Save</button>
+                    <button onClick={() => setEditingId(null)} className="px-3 py-1 bg-gray-600 rounded">Cancel</button>
+                  </div>
+                ) : (
+                  <>
+                    <div>
+                      <p className="font-bold">{inv.name}</p>
+                      <p className="text-sm opacity-80">{inv.welcome_message}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          setEditingId(inv.id);
+                          setEditName(inv.name);
+                          setEditWelcome(inv.welcome_message);
+                        }}
+                        className="px-3 py-1 bg-blue-600 rounded text-sm"
+                      >
+                        Edit
+                      </button>
+                      <button onClick={() => deleteInvitee(inv.id)} className="px-3 py-1 bg-red-600 rounded text-sm">
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'rsvps' && (
+        <div className="space-y-3">
+          {rsvps.length === 0 ? (
+            <p className="text-center opacity-70">No RSVPs yet...</p>
+          ) : (
+            rsvps.map((r) => (
+              <div key={r.id} className="bg-white/10 backdrop-blur p-4 rounded-lg space-y-2">
+                <p className="font-bold text-lg">{r.invitee_name}</p>
+                <p><strong>Attendance:</strong> {r.attendance}</p>
+                {r.drink_non_alc && <p><strong>N/A Drink:</strong> {r.drink_non_alc}</p>}
+                {r.drink_alc && <p><strong>21+:</strong> {r.drink_alc}</p>}
+                {r.food && <p><strong>Food:</strong> {r.food}</p>}
+                {r.bringing && <p><strong>Bringing:</strong> {r.bringing}</p>}
+                {r.mad_libs && <p className="italic">"{r.mad_libs}"</p>}
+                <p className="text-xs opacity-60">Submitted: {new Date(r.created_at).toLocaleString()}</p>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }

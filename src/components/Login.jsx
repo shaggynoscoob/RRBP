@@ -23,7 +23,7 @@ export default function Login() {
       .single();
 
     if (error || !data) {
-      setError('Try again or call (808) 930-3345');
+      setError('Try again or call (908) 930-3345');
       return;
     }
 
@@ -36,22 +36,19 @@ export default function Login() {
         setError('Wrong password, retard.');
         return;
       }
+      localStorage.setItem('riley_auth', 'true');
       navigate('/riley');
-        } else {
-          const userData = { name: cleanName, welcome: data.welcome_message };
-          localStorage.setItem('welcome', data.welcome_message);
-          localStorage.setItem('current_user', JSON.stringify(userData));
-          navigate('/main');
+    } else {
+      const userData = { name: cleanName, welcome: data.welcome_message };
+      localStorage.setItem('current_user', JSON.stringify(userData));
+      localStorage.setItem('welcome', data.welcome_message);
+      navigate('/main');
     }
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <div
-        className={`w-full max-w-md rounded-2xl bg-white/10 backdrop-blur-lg p-8 shadow-2xl transform transition-all duration-700 ease-out ${
-          true ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
-        }`}
-      >
+      <div className="w-full max-w-md rounded-2xl bg-white/10 backdrop-blur-lg p-8 shadow-2xl">
         <h1 className="text-4xl font-bold text-center mb-2 animate-pulse">
           RRBP
         </h1>
@@ -75,12 +72,12 @@ export default function Login() {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg bg-white/20 placeholder-white/50 text-white text-lg focus:outline-none focus:ring-4 focus:ring-pink-500 transition animate-fadeIn"
+              className="w-full px-4 py-3 rounded-lg bg-white/20 placeholder-white/50 text-white text-lg focus:outline-none focus:ring-4 focus:ring-pink-500 transition"
             />
           )}
 
           {error && (
-            <p className="text-red-400 text-center font-medium animate-shake">
+            <p className="text-red-400 text-center font-medium">
               {error}
             </p>
           )}
