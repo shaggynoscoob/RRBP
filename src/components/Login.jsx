@@ -55,10 +55,10 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md rounded-2xl bg-white/10 backdrop-blur-lg p-8 shadow-2xl">
         <h1 className="text-4xl font-bold text-center mb-2 animate-pulse">
-          RRBP
+          PEOPLE OF EARTH
         </h1>
         <p className="text-center text-sm opacity-80 mb-8">
-          Riley’s Retarded Birthday Party
+          WELCOME TO MY STUPID FUCKING PARTY WEBSITE
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">

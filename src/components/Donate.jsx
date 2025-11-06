@@ -2,7 +2,7 @@ export default function Donate() {
     return (
         <div className="p-6 space-y-10 text-center min-h-screen">
             <h1 className="text-5xl font-black bg-gradient-to-r from-yellow-400 to-pink-600 bg-clip-text text-transparent">
-                FUND THE CHAOS
+                FUND THE FUN. ALL PROCEEDS NOT SPENT ON HOT DOGS OR BEER WILL GO DIRECTLY TOWARDS REGIME CHANGE IN VENEZUELA
             </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">

@@ -45,6 +45,14 @@ export default function Main() {
                     </a>
                 </div>
             </div>
+            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 space-y-4">
+                <h2 className="text-3xl font-bold">Why?</h2>
+                <p className="text-xl">No one cares</p>
+                <p className="text-sm opacity-80">Hang out on the beach eat and drink and have a bonfire</p>
+                <p className="text-sm opacity-80">Guitars and beer encouraged but not required</p>
+                <p className="text-sm opacity-80">See the links below for more info - please click RSVP</p>
+                <p className="text-sm opacity-80">Somebody bring a fire extinguisher</p>
+            </div>
 
             {/* Navigation */}
             <div className="grid grid-cols-2 gap-4">
