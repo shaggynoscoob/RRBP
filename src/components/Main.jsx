@@ -52,6 +52,7 @@ export default function Main() {
                 <p className="text-sm opacity-80">Guitars and beer encouraged but not required</p>
                 <p className="text-sm opacity-80">See the links below for more info - please click RSVP</p>
                 <p className="text-sm opacity-80">Somebody bring a fire extinguisher</p>
+                <p className="text-sm opacity-80">also if you refresh the page at any time everything breaks so dont do that</p>
             </div>
 
             {/* Navigation */}
