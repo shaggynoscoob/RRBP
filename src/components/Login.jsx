@@ -13,14 +13,19 @@ export default function Login() {
     e.preventDefault();
     setError('');
 
-    const cleanName = name.trim().toLowerCase();
+    // Trim only — let the DB comparison be case-insensitive via ILIKE
+    const cleanName = name.trim();
     if (!cleanName) return;
 
     const { data, error } = await supabase
       .from('invitees')
       .select('name, welcome_message')
+      // Use a case-insensitive comparison (ILIKE) so users can type any casing
       .ilike('name', cleanName)
       .single();
+    // debug: surface Supabase result for easier troubleshooting in production
+    // (will appear in browser console)
+    console.debug('Login lookup', { name: cleanName, data, error });
 
     if (error || !data) {
       setError('Try again or call (908) 930-3345');
